@@ -1,16 +1,41 @@
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
+import React from 'react'
+import {getAllPosts} from '@/lib/posts'
+import Link from 'next/link'
 import GridBlog from '@/components/GridBlog'
-import Blog from '@/components/Blog'
 
-const inter = Inter({ subsets: ['latin'] })
+export async function getStaticProps() {
+    const allPosts = await getAllPosts()
 
-export default function Home() {
+    return {
+        props: {
+            allPosts: allPosts,
+        },
+    }
+}
 
+const Home = ({allPosts}) => {
+    // console.log(allPosts)
   return (
     <>
-    {/* <GridBlog /> */}
-    <Blog />
+        <div  className="container px-5 py-24 mx-auto">
+        <div className="flex flex-wrap -m-4">
+    {allPosts.nodes.map((post) => (
+
+        
+        <GridBlog
+        key={post.id}
+        listSlug={post.slug}
+        listTitle={post.title}
+        listsDate={post.date}
+        listFeatured={post.featuredImage.node.mediaDetails.sizes[3].sourceUrl}
+        listCategeorySlug={post.categories.nodes[0].slug}
+        listCategeory={post.categories.nodes[0].name}
+        />
+        ))}
+        </div>
+        </div>
     </>
   )
 }
+
+export default Home

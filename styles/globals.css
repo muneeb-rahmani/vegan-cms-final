@@ -35,3 +35,29 @@
     opacity: 1;
   }
 }
+
+@layer utilities {
+  .post-content p {
+    @apply pb-4 text-lg
+  }
+
+  .post-content a {
+    @apply text-blue-600 no-underline
+  }
+
+  .post-content h2 {
+    @apply text-2xl font-bold py-2
+  }
+  
+  .post-content h3 {
+    @apply text-xl font-bold py-2
+  }
+  
+  .post-content h6 {
+    @apply text-lg font-bold py-2
+  }
+  
+  .post-content ul {
+    @apply pb-4 list-disc list-inside
+  }
+}

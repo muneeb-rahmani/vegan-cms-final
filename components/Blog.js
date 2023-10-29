@@ -1,78 +1,23 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
-import LoadMore from './LoadMore';
-
-// import Thumbnail from '@/public/assets/thumbnail.jpg'
-// import LoadingScreen from './Loading';
-
-const fetchPosts = async (endCursor = null) => {
-  const condition = `after: "${endCursor}", first: 6, where: {orderby: {field: DATE, order: DESC}}`;
-  const url = process.env.BACKEND_API;
-
-  const query = `
-    query {
-      posts(${condition}) {
-        nodes {
-          date
-          slug
-          title
-          featuredImage {
-            node {
-              mediaDetails {
-                file
-                sizes {
-                  width
-                  sourceUrl
-                  height
-                }
-              }
-            }
-          }
-          categories {
-            nodes {
-              name
-              slug
-            }
-          }
-        }
-        pageInfo {
-          endCursor
-          hasNextPage
-          hasPreviousPage
-          startCursor
-        }
-      }
-    }
-  `;
-
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ query }),
-  });
-
-  const data = await response.json();
-  console.log(data)
-  return data.data.posts.nodes;
-};
+import LoadingScreen from './LoadMore';
+import { fetchPosts } from '@/lib/graphql';
 
 const defaultImageUrl = '/assets/thumbnail.jpg';
 
-
-
 const Blog = () => {
   const [posts, setPosts] = useState([]);
-  // console.log(posts);
+  
   useEffect(() => {
-    fetchPosts().then(setPosts);
+    fetchPosts().then((data) => {
+      setPosts(data);
+    });
   }, []);
 
-  // if(!posts) {
-  //   <LoadingScreen />
-  // }
+  if (!posts || posts.length === 0) {
+    return <LoadingScreen />; // You should have a loading component to display while fetching data.
+  }
 
   return (
     
@@ -115,8 +60,7 @@ const Blog = () => {
     </div>
   </div>
   <LoadMore posts={posts} setPosts={setPosts} />
-</section>
-
+    </section>
   );
 };
 
