@@ -1,10 +1,12 @@
-import React from 'react'
-import {getAllPosts} from '@/lib/posts'
+import React, { useState } from 'react'
+import {getPostList} from '@/lib/posts'
 import Link from 'next/link'
 import GridBlog from '@/components/GridBlog'
+import LoadMore from '@/components/LoadMore'
+
 
 export async function getStaticProps() {
-    const allPosts = await getAllPosts()
+    const allPosts = await getPostList()
 
     return {
         props: {
@@ -14,12 +16,13 @@ export async function getStaticProps() {
 }
 
 const Home = ({allPosts}) => {
+    const [posts, setPosts] = useState(allPosts)
     // console.log(allPosts)
   return (
     <>
         <div  className="container px-5 py-24 mx-auto">
         <div className="flex flex-wrap -m-4">
-    {allPosts.nodes.map((post) => (
+    {posts.nodes.map((post) => (
 
         
         <GridBlog
@@ -34,6 +37,7 @@ const Home = ({allPosts}) => {
         ))}
         </div>
         </div>
+        <LoadMore posts={posts} setPosts={setPosts}/>
     </>
   )
 }
