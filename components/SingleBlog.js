@@ -45,7 +45,7 @@ const SingleBlog = ({
               </div>
               <div>
                 <p className="text-gray-800 dark:text-gray-400">
-                  <a href="/author/mario-sanchez">{singleAuthor}</a>
+                  <Link href="#">{singleAuthor}</Link>
                 </p>
                 <div className="flex items-center space-x-2 text-sm">
                   <Date
